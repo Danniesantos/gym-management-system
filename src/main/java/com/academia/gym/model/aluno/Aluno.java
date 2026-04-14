@@ -22,7 +22,7 @@ public class Aluno {
     private Long id;
     @Column(unique = true, nullable = false, length = 11)
     private String cpf;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String nome;
     @Column(unique = true, nullable = false)
     private String email;
@@ -31,7 +31,7 @@ public class Aluno {
     private LocalDate dataNascimento;
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
-    @Column(length = 15)
+    @Column(length = 11)
     private String telefone;
     @Embedded
     private Endereco endereco;
