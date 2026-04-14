@@ -1,4 +1,4 @@
-package com.academia.gym.modelAluno;
+package com.academia.gym.model.aluno;
 
 public enum Estado {
 

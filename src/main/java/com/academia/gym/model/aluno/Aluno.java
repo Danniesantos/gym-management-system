@@ -1,6 +1,5 @@
-package com.academia.gym.modelAluno;
+package com.academia.gym.model.aluno;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.academia.gym.modelAluno;
+package com.academia.gym.model.aluno;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
