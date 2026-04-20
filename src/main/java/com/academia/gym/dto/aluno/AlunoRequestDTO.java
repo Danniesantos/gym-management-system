@@ -3,14 +3,12 @@ package com.academia.gym.dto.aluno;
 import com.academia.gym.model.aluno.Sexo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
