@@ -1,4 +1,4 @@
-package com.academia.gym.mapper;
+package com.academia.gym.mapper.aluno;
 
 import com.academia.gym.dto.aluno.EnderecoDTO;
 import com.academia.gym.model.aluno.Endereco;
