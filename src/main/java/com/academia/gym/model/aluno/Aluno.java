@@ -1,10 +1,13 @@
 package com.academia.gym.model.aluno;
 
+import com.academia.gym.model.matricula.Matricula;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -26,6 +29,7 @@ public class Aluno {
     private String email;
     @Column(nullable = false)
     private String senha;//futuramente hash
+    @Column(nullable = false)
     private LocalDate dataNascimento;
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
@@ -33,7 +37,11 @@ public class Aluno {
     private String telefone;
     @Embedded
     private Endereco endereco;
+    @Column(nullable = false)
     private Boolean ativo;
     @Column(nullable = false)
     private LocalDateTime dataCadastro;
+
+    @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Matricula> matriculas = new ArrayList<>();
 }
