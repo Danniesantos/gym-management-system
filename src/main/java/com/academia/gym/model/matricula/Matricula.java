@@ -3,10 +3,7 @@ package com.academia.gym.model.matricula;
 import com.academia.gym.model.aluno.Aluno;
 import com.academia.gym.model.plano.Plano;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -16,6 +13,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Matricula {
 
     @Id

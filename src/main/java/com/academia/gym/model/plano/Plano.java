@@ -2,10 +2,7 @@ package com.academia.gym.model.plano;
 
 import com.academia.gym.model.matricula.Matricula;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,6 +14,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Plano {
 
     @Id
@@ -24,7 +22,7 @@ public class Plano {
     private Long id;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TipoDePlanoEnum tipo;
+    private TipoDePlanoEnum tipoPlano;
     @Column(name = "duracao_dias")
     private Integer duracaoDias;
     @Column(nullable = false,precision = 8, scale = 2)
