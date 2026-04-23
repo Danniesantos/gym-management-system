@@ -7,7 +7,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@Builder
 @Entity
 @Table(name = "matriculas")
 @Getter
