@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Builder
 public record PlanoResponseDTO(Long id,
-                               TipoDePlanoEnum tipo,
+                               TipoDePlanoEnum tipoPlano,
                                Integer duracaoDias,
                                BigDecimal preco) {
 
