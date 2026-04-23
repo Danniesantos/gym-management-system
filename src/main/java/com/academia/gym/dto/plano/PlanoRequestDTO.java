@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 public class PlanoRequestDTO {
 
     @NotNull(message = "Tipo do plano é obrigatório")
-    private TipoDePlanoEnum tipo;
+    private TipoDePlanoEnum tipoPlano;
     private Integer duracaoDias;
     @DecimalMin(value = "0.0", inclusive = false, message = "Preço deve ser maior que zero")
     private BigDecimal preco;
