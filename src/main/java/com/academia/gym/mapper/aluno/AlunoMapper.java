@@ -42,11 +42,13 @@ public class AlunoMapper {
                 .endereco(enderecoMapper.toDTO(aluno.getEndereco()))
                 .ativo(aluno.getAtivo())
                 .dataCadastro(aluno.getDataCadastro())
+                .dataAtualizacao(aluno.getDataAtualizacao())
+                .dataDesativacao(aluno.getDataDesativacao())
                 .build();
 
     }
 
-    public Aluno updateToEntity(Aluno alunoEntity, AlunoRequestDTO requestDTO) {
+    public Aluno updateAluno(Aluno alunoEntity, AlunoRequestDTO requestDTO) {
         return Aluno.builder()
                 .id(alunoEntity.getId())
                 .cpf(requestDTO.getCpf() != null ? requestDTO.getCpf() : alunoEntity.getCpf())
@@ -59,6 +61,8 @@ public class AlunoMapper {
                 .endereco(requestDTO.getEndereco() != null ? enderecoMapper.toEntity(requestDTO.getEndereco()) : alunoEntity.getEndereco())
                 .ativo(alunoEntity.getAtivo())
                 .dataCadastro(alunoEntity.getDataCadastro())
+                .dataAtualizacao(alunoEntity.getDataAtualizacao())
+                .dataDesativacao(alunoEntity.getDataDesativacao())
                 .build();
     }
 }
