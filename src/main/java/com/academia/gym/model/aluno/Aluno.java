@@ -3,6 +3,9 @@ package com.academia.gym.model.aluno;
 import com.academia.gym.model.matricula.Matricula;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "alunos")
 public class Aluno {
 
@@ -39,8 +43,12 @@ public class Aluno {
     private Endereco endereco;
     @Column(nullable = false)
     private Boolean ativo;
+    @CreatedDate
     @Column(nullable = false)
     private LocalDateTime dataCadastro;
+    @LastModifiedDate
+    private LocalDateTime dataAtualizacao;
+    private LocalDateTime dataDesativacao;
 
     @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Matricula> matriculas = new ArrayList<>();
