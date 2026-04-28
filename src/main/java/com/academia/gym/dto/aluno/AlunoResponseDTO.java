@@ -5,6 +5,7 @@ import lombok.Builder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 @Builder
 public record AlunoResponseDTO(Long id,
                                String cpf,
@@ -15,5 +16,7 @@ public record AlunoResponseDTO(Long id,
                                String telefone,
                                EnderecoDTO endereco,
                                Boolean ativo,
-                               LocalDateTime dataCadastro) {
+                               LocalDateTime dataCadastro,
+                               LocalDateTime dataAtualizacao,
+                               LocalDateTime dataDesativacao) {
 }
