@@ -1,7 +1,6 @@
 package com.academia.gym.dto.aluno;
 
-public record AlunoFiltroDTO(Long id,
-                             String nome,
+public record AlunoFiltroDTO(String nome,
                              String cpf,
                              Boolean ativo) {
 }

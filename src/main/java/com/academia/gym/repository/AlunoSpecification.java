@@ -31,12 +31,6 @@ public class AlunoSpecification {
                 );
             }
 
-            if (filtro.id() != null) {
-                predicates.add(
-                        cb.equal(root.get("id"), filtro.id())
-                );
-            }
-
             if (filtro.ativo() != null) {
                 predicates.add(
                         cb.equal(root.get("ativo"), filtro.ativo())
