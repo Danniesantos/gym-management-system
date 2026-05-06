@@ -3,66 +3,23 @@ package com.academia.gym.mapper.aluno;
 import com.academia.gym.dto.aluno.AlunoRequestDTO;
 import com.academia.gym.dto.aluno.AlunoResponseDTO;
 import com.academia.gym.model.aluno.Aluno;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.*;
 
-@Component
-@RequiredArgsConstructor
-public class AlunoMapper {
+@Mapper(componentModel = "spring", uses = EnderecoMapper.class)
+public interface AlunoMapper {
 
-    private final EnderecoMapper enderecoMapper;
 
-    public Aluno toEntity(AlunoRequestDTO dto) {
-        if (dto == null) return null;
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "dataCadastro", ignore = true)
+    @Mapping(target = "dataAtualizacao", ignore = true)
+    @Mapping(target = "dataDesativacao", ignore = true)
+    Aluno toEntity(AlunoRequestDTO dto);
 
-        return Aluno.builder()
-                .cpf(dto.getCpf())
-                .nome(dto.getNome())
-                .email(dto.getEmail())
-                .senha(dto.getSenha())
-                .dataNascimento(dto.getDataNascimento())
-                .sexo(dto.getSexo())
-                .telefone(dto.getTelefone())
-                .endereco(enderecoMapper.toEntity(dto.getEndereco()))
-                .build();
+    AlunoResponseDTO toDTO(Aluno entity);
 
-    }
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "endereco", ignore = true)
+    void updateAluno(@MappingTarget Aluno aluno, AlunoRequestDTO dto);
 
-    public AlunoResponseDTO toDTO(Aluno aluno) {
-        if (aluno == null) return null;
 
-        return AlunoResponseDTO.builder()
-                .id(aluno.getId())
-                .cpf(aluno.getCpf())
-                .nome(aluno.getNome())
-                .email(aluno.getEmail())
-                .dataNascimento(aluno.getDataNascimento())
-                .sexo(aluno.getSexo())
-                .telefone(aluno.getTelefone())
-                .endereco(enderecoMapper.toDTO(aluno.getEndereco()))
-                .ativo(aluno.getAtivo())
-                .dataCadastro(aluno.getDataCadastro())
-                .dataAtualizacao(aluno.getDataAtualizacao())
-                .dataDesativacao(aluno.getDataDesativacao())
-                .build();
-
-    }
-
-    public Aluno updateAluno(Aluno alunoEntity, AlunoRequestDTO requestDTO) {
-        return Aluno.builder()
-                .id(alunoEntity.getId())
-                .cpf(requestDTO.getCpf() != null ? requestDTO.getCpf() : alunoEntity.getCpf())
-                .nome(requestDTO.getNome() != null ? requestDTO.getNome() : alunoEntity.getNome())
-                .email(requestDTO.getEmail() != null ? requestDTO.getEmail() : alunoEntity.getEmail())
-                .senha(requestDTO.getSenha() != null ? requestDTO.getSenha() : alunoEntity.getSenha())
-                .dataNascimento(requestDTO.getDataNascimento() != null ? requestDTO.getDataNascimento() : alunoEntity.getDataNascimento())
-                .sexo(requestDTO.getSexo() != null ? requestDTO.getSexo() : alunoEntity.getSexo())
-                .telefone(requestDTO.getTelefone() != null ? requestDTO.getTelefone() : alunoEntity.getTelefone())
-                .endereco(requestDTO.getEndereco() != null ? enderecoMapper.toEntity(requestDTO.getEndereco()) : alunoEntity.getEndereco())
-                .ativo(alunoEntity.getAtivo())
-                .dataCadastro(alunoEntity.getDataCadastro())
-                .dataAtualizacao(alunoEntity.getDataAtualizacao())
-                .dataDesativacao(alunoEntity.getDataDesativacao())
-                .build();
-    }
 }
