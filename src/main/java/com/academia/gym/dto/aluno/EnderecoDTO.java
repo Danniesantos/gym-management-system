@@ -14,22 +14,23 @@ import lombok.*;
 @NoArgsConstructor
 public class EnderecoDTO {
 
-    @NotBlank(message = "CEP é obrigatório")
-    @Pattern(regexp = "^\\d{8}$", message = "CEP deve conter 8 dígitos")
+    @NotBlank(groups = OnCreate.class, message = "CEP é obrigatório")
+    @Pattern(regexp = "^\\d{8}$", groups = {OnCreate.class, OnUpdate.class}, message = "CEP deve conter 8 dígitos")
     private String cep;
-    @Size(min = 1, max = 100)
-    @NotBlank(message = "Rua é obrigatória")
+    @Size(min = 3, max = 100, groups = {OnCreate.class, OnUpdate.class})
+    @NotBlank(groups = OnCreate.class, message = "Rua é obrigatória")
     private String rua;
-    @Size(max = 5)
+    @Size(max = 5, groups = {OnCreate.class, OnUpdate.class})
     private String numero;
-    @Size(max = 50)
-    @NotBlank(message = "Bairro é obrigatorio")
+    @Size(min = 3,max = 50, groups = {OnCreate.class, OnUpdate.class})
+    @NotBlank(groups = OnCreate.class, message = "Bairro é obrigatorio")
     private String bairro;
-    @Size(max = 50)
-    @NotBlank(message = "Cidade é obrigatória")
+    @Size(min = 3,max = 50, groups = {OnCreate.class, OnUpdate.class})
+    @NotBlank(groups = OnCreate.class, message = "Cidade é obrigatória")
     private String cidade;
-    @NotNull(message = "Estado é obrigatório")
+    @Size(min = 2)
+    @NotNull(groups = OnCreate.class, message = "Estado é obrigatório")
     private Estado estado;
-    @Size(max = 50)
+    @Size(max = 50, groups = {OnCreate.class, OnUpdate.class})
     private String complemento;
 }

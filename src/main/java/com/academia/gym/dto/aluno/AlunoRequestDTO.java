@@ -15,25 +15,26 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class AlunoRequestDTO {
 
-    @CPF
-    @NotBlank(message = "CPF é obrigatorio")
+    @NotBlank(groups = OnCreate.class, message = "CPF é obrigatorio")
+    @CPF(groups = {OnCreate.class, OnUpdate.class}, message = "CPF inválido")
     private String cpf;
-    @NotBlank(message = "Nome é obrigatorio")
-    @Size(min = 3, max = 100)
+    @NotBlank(groups = OnCreate.class, message = "Nome é obrigatorio")
+    @Size(min = 3, max = 100, groups = {OnCreate.class, OnUpdate.class})
     private String nome;
-    @NotBlank(message = "Email é obrigatorio")
-    @Email(message = "Email invalido")
+    @NotBlank(groups = OnCreate.class, message = "Email é obrigatorio")
+    @Email(groups = {OnCreate.class, OnUpdate.class}, message = "Email invalido")
     private String email;
-    @NotBlank(message = "Senha é obrigatorio")
-    @Size(min = 6, message = "Senha deve ter no minimo 6 caracteres")
+    @NotBlank(groups = OnCreate.class, message = "Senha é obrigatorio")
+    @Size(min = 6, max = 100, groups = {OnCreate.class, OnUpdate.class}, message = "Senha deve ter no minimo 6 caracteres")
     private String senha;
-    @Past(message = "Data de nascimento deve ser no passado")
+    @Past(groups = {OnCreate.class, OnUpdate.class}, message = "Data de nascimento deve ser no passado")
     private LocalDate dataNascimento;
-    @NotNull(message = "Sexo é obrigatorio")
+    @NotNull(groups = OnCreate.class, message = "Sexo é obrigatorio")
     private Sexo sexo;
 
     @Pattern(
             regexp = "^\\d{10,11}$",
+            groups = {OnCreate.class, OnUpdate.class},
             message = "Telefone deve conter 10 ou 11 dígitos"
     )
     private String telefone;
