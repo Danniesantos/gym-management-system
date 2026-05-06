@@ -7,59 +7,29 @@ public record ErrorResponseDTO(int status,
                                String message,
                                String path,
                                LocalDateTime timestamp,
-                               List<ErroCampo> erros) {
+                               List<ErroCampo> errors) {
 
-    public static ErrorResponseDTO badRequest(String mensagem, String path, List<ErroCampo> erros) {
+    public static ErrorResponseDTO of(
+            int status,
+            String message,
+            String path,
+            List<ErroCampo> errors
+    ) {
         return new ErrorResponseDTO(
-                400,
-                mensagem,
+                status,
+                message,
                 path,
                 LocalDateTime.now(),
-                erros
+                errors == null ? List.of() : errors
         );
     }
 
-    public static ErrorResponseDTO badRequest(String mensagem, String path) {
-        return new ErrorResponseDTO(
-                400,
-                mensagem,
-                path,
-                LocalDateTime.now(),
-                List.of(new ErroCampo("erro", mensagem))
-        );
+    public static ErrorResponseDTO of(
+            int status,
+            String message,
+            String path
+    ) {
+        return of(status, message, path, List.of());
     }
-
-    public static ErrorResponseDTO conflict(String mensagem, String path) {
-        return new ErrorResponseDTO(
-                409,
-                mensagem,
-                path,
-                LocalDateTime.now(),
-                List.of(new ErroCampo("erro", mensagem))
-        );
-
-    }
-
-    public static ErrorResponseDTO notFound(String mensagem, String path) {
-        return new ErrorResponseDTO(
-                404,
-                mensagem,
-                path,
-                LocalDateTime.now(),
-                List.of(new ErroCampo("erro", mensagem))
-        );
-    }
-
-    public static ErrorResponseDTO unprocessableEntity(String mensagem, String path) {
-        return new ErrorResponseDTO(
-                422,
-                mensagem,
-                path,
-                LocalDateTime.now(),
-                List.of(new ErroCampo("erro", mensagem))
-        );
-    }
-
-
 }
 
