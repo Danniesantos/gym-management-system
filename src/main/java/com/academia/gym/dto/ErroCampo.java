@@ -1,5 +1,5 @@
 package com.academia.gym.dto;
 
 public record ErroCampo(String campo,
-                        String erro) {
+                        String message, String code) {
 }
