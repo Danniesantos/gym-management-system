@@ -13,6 +13,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -74,6 +75,22 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         return buildValidationError(ex.getBindingResult(), request);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleMethodNotAllowed(
+            HttpRequestMethodNotSupportedException ex,
+            HttpServletRequest request) {
+
+        String mensagem = "Método " + ex.getMethod() + " não é permitido para este endpoint";
+
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+                .body(ErrorResponseDTO.of(
+                        HttpStatus.METHOD_NOT_ALLOWED.value(),
+                        mensagem,
+                        request.getRequestURI(),
+                        List.of(new ErroCampo("method", mensagem, "METHOD_NOT_ALLOWED"))
+                ));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
