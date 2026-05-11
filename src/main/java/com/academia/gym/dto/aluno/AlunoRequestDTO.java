@@ -8,34 +8,36 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
-@Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class AlunoRequestDTO {
 
-    @NotBlank(groups = OnCreate.class, message = "CPF é obrigatorio")
-    @CPF(groups = {OnCreate.class, OnUpdate.class}, message = "CPF inválido")
+    @NotBlank(message = "CPF é obrigatorio", groups = OnCreate.class)
+    @CPF(message = "CPF inválido", groups = {OnCreate.class, OnUpdate.class})
     private String cpf;
-    @NotBlank(groups = OnCreate.class, message = "Nome é obrigatorio")
+    @NotBlank(message = "Nome é obrigatorio", groups = OnCreate.class)
     @Size(min = 3, max = 100, groups = {OnCreate.class, OnUpdate.class})
     private String nome;
-    @NotBlank(groups = OnCreate.class, message = "Email é obrigatorio")
-    @Email(groups = {OnCreate.class, OnUpdate.class}, message = "Email invalido")
+    @NotBlank(message = "Email é obrigatorio", groups = OnCreate.class)
+    @Email(message = "Email invalido", groups = {OnCreate.class, OnUpdate.class})
+    @Size(min = 5, max = 100, groups = {OnCreate.class, OnUpdate.class})
     private String email;
-    @NotBlank(groups = OnCreate.class, message = "Senha é obrigatorio")
-    @Size(min = 6, max = 100, groups = {OnCreate.class, OnUpdate.class}, message = "Senha deve ter no minimo 6 caracteres")
+    @NotBlank(message = "Senha é obrigatorio", groups = OnCreate.class)
+    @Size(min = 6, max = 100, message = "Senha deve ter no minimo 6 caracteres",
+            groups = {OnCreate.class, OnUpdate.class})
     private String senha;
-    @Past(groups = {OnCreate.class, OnUpdate.class}, message = "Data de nascimento deve ser no passado")
+    @NotNull(message = "Data de nascimento é obrigatória", groups = OnCreate.class)
+    @Past(message = "Data de nascimento deve ser no passado", groups = {OnCreate.class, OnUpdate.class})
     private LocalDate dataNascimento;
-    @NotNull(groups = OnCreate.class, message = "Sexo é obrigatorio")
     private Sexo sexo;
 
+    @NotBlank(groups = OnCreate.class)
     @Pattern(
             regexp = "^\\d{10,11}$",
-            groups = {OnCreate.class, OnUpdate.class},
-            message = "Telefone deve conter 10 ou 11 dígitos"
+            message = "Telefone deve conter 10 ou 11 dígitos",
+            groups = {OnCreate.class, OnUpdate.class}
     )
     private String telefone;
 
