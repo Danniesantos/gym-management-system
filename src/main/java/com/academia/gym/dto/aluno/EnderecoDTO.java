@@ -7,29 +7,28 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-@Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class EnderecoDTO {
 
-    @NotBlank(groups = OnCreate.class, message = "CEP é obrigatório")
-    @Pattern(regexp = "^\\d{8}$", groups = {OnCreate.class, OnUpdate.class}, message = "CEP deve conter 8 dígitos")
+    @NotBlank(message = "CEP é obrigatório", groups = OnCreate.class)
+    @Pattern(regexp = "^\\d{8}$", message = "CEP deve conter 8 dígitos",
+            groups = {OnCreate.class, OnUpdate.class})
     private String cep;
     @Size(min = 3, max = 100, groups = {OnCreate.class, OnUpdate.class})
-    @NotBlank(groups = OnCreate.class, message = "Rua é obrigatória")
+    @NotBlank(message = "Rua é obrigatória", groups = OnCreate.class)
     private String rua;
     @Size(max = 5, groups = {OnCreate.class, OnUpdate.class})
     private String numero;
     @Size(min = 3,max = 50, groups = {OnCreate.class, OnUpdate.class})
-    @NotBlank(groups = OnCreate.class, message = "Bairro é obrigatorio")
+    @NotBlank(message = "Bairro é obrigatorio", groups = OnCreate.class)
     private String bairro;
     @Size(min = 3,max = 50, groups = {OnCreate.class, OnUpdate.class})
-    @NotBlank(groups = OnCreate.class, message = "Cidade é obrigatória")
+    @NotBlank(message = "Cidade é obrigatória", groups = OnCreate.class)
     private String cidade;
-    @Size(min = 2)
-    @NotNull(groups = OnCreate.class, message = "Estado é obrigatório")
+    @NotNull(message = "Estado é obrigatório", groups = OnCreate.class)
     private Estado estado;
     @Size(max = 50, groups = {OnCreate.class, OnUpdate.class})
     private String complemento;
