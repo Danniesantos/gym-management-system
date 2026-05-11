@@ -5,85 +5,76 @@ import com.academia.gym.exception.BusinessException;
 import com.academia.gym.exception.ConflictException;
 import com.academia.gym.model.aluno.Aluno;
 import com.academia.gym.repository.AlunoRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.academia.gym.dto.ErroCampo.erro;
+
 @RequiredArgsConstructor
 @Component
+@Getter
 public class AlunoValidator {
-
 
     private final AlunoRepository alunoRepository;
 
     private static final String EMAIL_DUPLICADO = "EMAIL_DUPLICADO";
     private static final String CPF_DUPLICADO = "CPF_DUPLICADO";
-    private static final String VALIDATION_ERROR = "Dados inválidos";
 
     public void validarCadastro(String email, String cpf) {
-
-        List<ErroCampo> erros = new ArrayList<>();
-
-        String emailNormalizado = email != null ? email.trim() : null;
-
-        if (emailNormalizado != null &&
-                alunoRepository.existsByEmail(emailNormalizado)) {
-            erros.add(erro("email", "Email já cadastrado", EMAIL_DUPLICADO));
-        }
-
-        if (cpf != null) {
-            String cpfLimpo = limparCpf(cpf);
-
-            if (alunoRepository.existsByCpf(cpfLimpo)) {
-                erros.add(erro("cpf", "CPF já cadastrado", CPF_DUPLICADO));
-            }
-        }
-
-        if (!erros.isEmpty()) {
-            throw new BusinessException(VALIDATION_ERROR, erros);
-        }
+        validar(email, cpf, null);
     }
 
-    public void validarUpdate(String email, String cpf, Long id) {
+    public void validarUpdate(Aluno aluno, String email, String cpf) {
 
-        List<ErroCampo> erros = new ArrayList<>();
-
-        String emailNormalizado = email != null ? email.trim() : null;
-
-        if (emailNormalizado != null &&
-                alunoRepository.existsByEmailAndIdNot(emailNormalizado, id)) {
-
-            erros.add(erro("email", "Email já em uso", EMAIL_DUPLICADO));
-        }
-
-        if (cpf != null) {
-            String cpfLimpo = limparCpf(cpf);
-
-            if (alunoRepository.existsByCpfAndIdNot(cpfLimpo, id)) {
-                erros.add(erro("cpf", "CPF já em uso", CPF_DUPLICADO));
-            }
-        }
-
-        if (!erros.isEmpty()) {
-            throw new BusinessException(VALIDATION_ERROR, erros);
-        }
-    }
-
-    private String limparCpf(String cpf) {
-        return cpf.replaceAll("\\D", "");
-    }
-
-    public void validarAlunoAtivo(Aluno aluno) {
         if (!aluno.getAtivo()) {
             throw new ConflictException("Aluno inativo não pode ser atualizado");
         }
+
+        validar(email, cpf, aluno.getId());
     }
 
-    private ErroCampo erro(String campo, String mensagem, String code) {
-        return new ErroCampo(campo, mensagem, code);
+    private void validar(String email, String cpf, Long id) {
+
+        List<ErroCampo> erros = new ArrayList<>();
+
+        validarCpfDuplicado(cpf, id, erros);
+        validarEmailDuplicado(email, id, erros);
+
+        if (!erros.isEmpty()) {
+            throw new BusinessException("Dados inválidos", erros);
+        }
     }
+
+    private void validarCpfDuplicado(String cpf, Long id, List<ErroCampo> erros) {
+
+        if (cpf == null) return;
+
+        boolean existe = (id == null)
+                ? alunoRepository.existsByCpf(cpf)
+                : alunoRepository.existsByCpfAndIdNot(cpf, id);
+
+        if (existe) {
+            erros.add(erro("cpf", "CPF já em uso", CPF_DUPLICADO));
+        }
+    }
+
+    private void validarEmailDuplicado(String email, Long id, List<ErroCampo> erros) {
+
+        if (email == null) return;
+
+        boolean existe = (id == null)
+                ? alunoRepository.existsByEmail(email)
+                : alunoRepository.existsByEmailAndIdNot(email, id);
+
+        if (existe) {
+            erros.add(erro("email", "Email já em uso", EMAIL_DUPLICADO));
+        }
+    }
+
 }
 
 

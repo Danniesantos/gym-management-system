@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -42,7 +41,7 @@ public class Aluno {
     @Embedded
     private Endereco endereco;
     @Column(nullable = false)
-    private Boolean ativo;
+    private Boolean ativo = true;
     @CreatedDate
     @Column(nullable = false)
     private LocalDateTime dataCadastro;
@@ -52,4 +51,13 @@ public class Aluno {
 
     @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Matricula> matriculas = new ArrayList<>();
+
+    public void ativar() {
+        this.ativo = true;
+    }
+
+    public void desativar() {
+        this.ativo = false;
+        this.dataDesativacao = LocalDateTime.now();
+    }
 }
