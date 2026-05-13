@@ -48,6 +48,7 @@ class AlunoValidatorTest {
         ErroCampo erro = exception.getErros().get(0);
         assertEquals("cpf", erro.field());
         assertEquals("CPF já em uso", erro.message());
+        assertEquals("CPF_DUPLICADO", erro.code());
     }
 
     @Test
@@ -61,6 +62,7 @@ class AlunoValidatorTest {
         ErroCampo erro = exception.getErros().get(0);
         assertEquals("email", erro.field());
         assertEquals("Email já em uso", erro.message());
+        assertEquals("EMAIL_DUPLICADO", erro.code());
     }
 
     @Test
@@ -106,6 +108,7 @@ class AlunoValidatorTest {
 
         assertEquals("cpf", erro.field());
         assertEquals("CPF já em uso", erro.message());
+        assertEquals("CPF_DUPLICADO", erro.code());
     }
 
     @Test
@@ -123,6 +126,7 @@ class AlunoValidatorTest {
 
         assertEquals("email", erro.field());
         assertEquals("Email já em uso", erro.message());
+        assertEquals("EMAIL_DUPLICADO", erro.code());
     }
 
     @Test
