@@ -41,6 +41,8 @@ public class AlunoRequestDTO {
     )
     private String telefone;
 
+    @NotNull(message = "Endereço obrigatório",
+            groups = OnCreate.class)
     @Valid
     private EnderecoDTO endereco;
 }
