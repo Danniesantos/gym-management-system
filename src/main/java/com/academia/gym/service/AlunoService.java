@@ -77,7 +77,7 @@ public class AlunoService {
             enderecoMapper.updateEndereco(aluno.getEndereco(), dto.getEndereco());
         }
 
-        return mapper.toDTO(aluno);
+        return mapper.toDTO(repository.save(aluno));
     }
 
     private Aluno buscarAluno(Long id) {
