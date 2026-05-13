@@ -1,7 +1,6 @@
 package com.academia.gym.dto.aluno;
 
 import com.academia.gym.model.aluno.Sexo;
-import lombok.Builder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
