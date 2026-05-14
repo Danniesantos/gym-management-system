@@ -113,7 +113,8 @@ class AlunoControllerTest {
     @Test
     void deveRetornarBusinessExceptionQuandoDadosInvalidos() throws Exception {
 
-        given(alunoService.salvarAluno(any(AlunoRequestDTO.class))).willThrow(new BusinessException("Um ou mais campos estão inválidos"));
+        given(alunoService.salvarAluno(any(AlunoRequestDTO.class))).willThrow(
+                new BusinessException("Um ou mais campos estão inválidos"));
 
         mockMvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
