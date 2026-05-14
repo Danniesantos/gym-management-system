@@ -43,7 +43,6 @@ public class Aluno {
     @Column(nullable = false)
     private Boolean ativo = true;
     @CreatedDate
-    @Column(nullable = false)
     private LocalDateTime dataCadastro;
     @LastModifiedDate
     private LocalDateTime dataAtualizacao;
