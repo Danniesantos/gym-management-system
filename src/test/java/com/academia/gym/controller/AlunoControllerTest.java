@@ -47,47 +47,48 @@ class AlunoControllerTest {
     AlunoRequestDTO requestDto;
     AlunoResponseDTO responseDto;
     EnderecoDTO enderecoDTO;
-    String url;
-    String URL_ID;
+    private static final String URL = "/alunos";
+    private static final String URL_ID = "/alunos/{id}";
+    private static final String URL_DESATIVAR = "/alunos/{id}/desativar";
     AlunoFiltroDTO filtro;
-    Pageable pageable;
-    Page<AlunoResponseDTO> paginaAluno;
 
     @BeforeEach
     void setup() {
-        url = "/alunos";
-        URL_ID = "/alunos/{id}";
         enderecoDTO = new EnderecoDTO(
                 "13735999",
-                "Rua: das flores",
+                "Rua das flores",
                 "3",
-                "Jardim Boa vista",
+                "Jardim Boa Vista",
                 "São Paulo",
                 Estado.SP,
-                null);
+                null
+        );
+
         requestDto = new AlunoRequestDTO(
                 "389.546.930-08",
                 "teste",
                 "teste@gmail.com",
                 "teste123",
-                LocalDate.of(2021, 01, 01),
+                LocalDate.of(2021, 1, 1),
                 Sexo.MASCULINO,
                 "19991280033",
-                enderecoDTO);
+                enderecoDTO
+        );
 
         responseDto = new AlunoResponseDTO(
                 1L,
                 "389.546.930-08",
                 "teste",
                 "teste@gmail.com",
-                LocalDate.of(2021, 01, 01),
+                LocalDate.of(2021, 1, 1),
                 Sexo.MASCULINO,
                 "19991280033",
                 enderecoDTO,
                 true,
-                LocalDateTime.of(2026, 05, 05, 10, 0),
-                LocalDateTime.of(2026, 05, 05, 10, 0),
-                null);
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                null
+        );
         filtro = new AlunoFiltroDTO(
                 "teste",
                 "93244698000",
@@ -99,11 +100,11 @@ class AlunoControllerTest {
 
         given(alunoService.salvarAluno(any(AlunoRequestDTO.class))).willReturn(responseDto);
 
-        mockMvc.perform(post(url)
+        mockMvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .content(toJson(requestDto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.id").value(responseDto.id()))
                 .andExpect(jsonPath("$.nome").value("teste"));
 
         then(alunoService).should().salvarAluno(any());
@@ -116,9 +117,9 @@ class AlunoControllerTest {
         given(alunoService.salvarAluno(any(AlunoRequestDTO.class))).willThrow(
                 new BusinessException("Um ou mais campos estão inválidos"));
 
-        mockMvc.perform(post(url)
+        mockMvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .content(toJson(requestDto)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.message").value("Um ou mais campos estão inválidos"));
 
@@ -130,8 +131,7 @@ class AlunoControllerTest {
     void deveRetornarAlunoPorId() throws Exception {
         given(alunoService.buscarPorId(responseDto.id())).willReturn(responseDto);
 
-        mockMvc.perform(get(URL_ID, responseDto.id())
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(URL_ID, responseDto.id()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(responseDto.id()));
 
@@ -143,8 +143,7 @@ class AlunoControllerTest {
     void deveRetornarNotFoundExceptionQuandoNaoEncontrado() throws Exception {
         given(alunoService.buscarPorId(responseDto.id())).willThrow(new NotFoundException("Aluno não encontrado"));
 
-        mockMvc.perform(get(URL_ID, responseDto.id())
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(URL_ID, responseDto.id()))
                 .andExpect(status().isNotFound());
 
         then(alunoService).should().buscarPorId(responseDto.id());
@@ -153,11 +152,11 @@ class AlunoControllerTest {
 
     @Test
     void deveRetornarBuscaPaginada() throws Exception {
-        pageable = PageRequest.of(0, 10);
-        paginaAluno = new PageImpl<>(List.of(responseDto), pageable, 1);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<AlunoResponseDTO> paginaAluno = new PageImpl<>(List.of(responseDto), pageable, 1);
         given(alunoService.buscar(any(), any(Pageable.class))).willReturn(paginaAluno);
 
-        mockMvc.perform(get(url)
+        mockMvc.perform(get(URL)
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk())
@@ -175,9 +174,9 @@ class AlunoControllerTest {
     @Test
     void deveRetornarBadRequestQuandoEmailForInvalido() throws Exception {
         requestDto.setEmail("email-invalido");
-        mockMvc.perform(post(url)
+        mockMvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .content(toJson(requestDto)))
                 .andExpect(status().isBadRequest());
 
         then(alunoService).shouldHaveNoInteractions();
@@ -198,7 +197,7 @@ class AlunoControllerTest {
                 }
                 """;
 
-        mockMvc.perform(post(url)
+        mockMvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest());
@@ -208,7 +207,7 @@ class AlunoControllerTest {
 
     @Test
     void deveDesativarAlunoPorId() throws Exception {
-        mockMvc.perform(patch(URL_ID, responseDto.id() + "/" + "desativar"))
+        mockMvc.perform(patch(URL_DESATIVAR, responseDto.id()))
                 .andExpect(status().isNoContent());
 
         then(alunoService).should().desativarAluno(responseDto.id());
@@ -219,7 +218,7 @@ class AlunoControllerTest {
     void deveRetornarNotFoundQuandoAlunoNaoExistir() throws Exception {
         willThrow(new NotFoundException("Aluno não encontrado")).given(alunoService).desativarAluno(7L);
 
-        mockMvc.perform(patch(URL_ID, 7L + "/" + "desativar"))
+        mockMvc.perform(patch(URL_DESATIVAR, 7L))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Aluno não encontrado"));
 
@@ -228,12 +227,12 @@ class AlunoControllerTest {
     }
 
     @Test
-    void deveAtualizarComSucesso() throws Exception {
+    void deveAtualizarAlunoComSucesso() throws Exception {
         given(alunoService.updateAluno(eq(responseDto.id()), any(AlunoRequestDTO.class))).willReturn(responseDto);
 
         mockMvc.perform(put(URL_ID, responseDto.id())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .content(toJson(requestDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(responseDto.id()));
 
@@ -248,7 +247,7 @@ class AlunoControllerTest {
 
         mockMvc.perform(put(URL_ID, responseDto.id())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .content(toJson(requestDto)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Aluno não encontrado"));
 
@@ -263,10 +262,14 @@ class AlunoControllerTest {
 
         mockMvc.perform(put(URL_ID, responseDto.id())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .content(toJson(requestDto)))
                 .andExpect(status().isBadRequest());
 
         then(alunoService).shouldHaveNoInteractions();
+    }
+
+    private String toJson(Object obj) throws Exception {
+        return objectMapper.writeValueAsString(obj);
     }
 }
 
