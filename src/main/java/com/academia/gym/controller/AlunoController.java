@@ -1,7 +1,6 @@
 package com.academia.gym.controller;
 
 import com.academia.gym.dto.aluno.*;
-import com.academia.gym.mapper.aluno.AlunoMapper;
 import com.academia.gym.service.AlunoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,6 @@ import java.net.URI;
 public class AlunoController {
 
     private final AlunoService alunoService;
-    private final AlunoMapper alunoMapper;
 
     @PostMapping
     public ResponseEntity<AlunoResponseDTO> salvarAluno(@Validated(OnCreate.class) @RequestBody AlunoRequestDTO alunoDto) {
